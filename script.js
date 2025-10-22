@@ -1,79 +1,119 @@
-/* ======================================
-   ALMA — Elegant JS Animations
-   For all pages (Home, About, Products, Contact, Login)
-====================================== */
+/* ==========================================
+   ALMA — Fashion Brand Interactive Script
+   Smooth animations + Lookbook Lightbox
+========================================== */
 
-// === Fade-in on page load ===
-window.addEventListener("load", () => {
-  document.body.style.opacity = "1";
-  document.body.style.transition = "opacity 0.6s ease";
-});
-
-// === Smooth fade-out when navigating to other pages ===
+/* ========== SCROLL FADE-UP ANIMATION ========== */
 document.addEventListener("DOMContentLoaded", () => {
-  const links = document.querySelectorAll("a[href]");
-  const body = document.body;
+  const animatedItems = document.querySelectorAll("[data-anim]");
 
-  links.forEach(link => {
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+  const fadeObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
 
-    link.addEventListener("click", (e) => {
-      if (link.target === "_blank" || href.startsWith("http")) return;
-      e.preventDefault();
-      body.style.opacity = "0";
-      setTimeout(() => window.location.href = href, 400);
-    });
-  });
+  animatedItems.forEach((item) => fadeObserver.observe(item));
 });
 
-// === Scroll animation using Intersection Observer ===
+/* ========== LOOKBOOK FADE-IN (on scroll) ========== */
 document.addEventListener("DOMContentLoaded", () => {
-  const animatedElements = document.querySelectorAll("[data-anim]");
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.2 });
+  const lookbookItems = document.querySelectorAll(".grid-lookbook figure");
 
-  animatedElements.forEach(el => observer.observe(el));
+  const lookbookObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          lookbookObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  lookbookItems.forEach((item) => lookbookObserver.observe(item));
 });
 
-// === Optional: highlight nav links while scrolling ===
-document.addEventListener("scroll", () => {
-  const sections = document.querySelectorAll("section[id]");
-  const navLinks = document.querySelectorAll(".site-nav a");
+/* ========== LOOKBOOK FULLSCREEN POPUP (Lightbox) ========== */
+document.addEventListener("DOMContentLoaded", () => {
+  const images = document.querySelectorAll(".grid-lookbook img");
 
-  let currentSection = "";
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
-    if (scrollY >= sectionTop) currentSection = section.getAttribute("id");
+  // Buat elemen lightbox
+  const lightbox = document.createElement("div");
+  lightbox.classList.add("lightbox");
+
+  const content = document.createElement("div");
+  content.classList.add("lightbox-content");
+
+  const img = document.createElement("img");
+  const closeBtn = document.createElement("span");
+  closeBtn.classList.add("lightbox-close");
+  closeBtn.innerHTML = "&times;";
+
+  // Tombol navigasi
+  const prevBtn = document.createElement("span");
+  prevBtn.classList.add("lightbox-prev");
+  prevBtn.innerHTML = "&#10094;";
+
+  const nextBtn = document.createElement("span");
+  nextBtn.classList.add("lightbox-next");
+  nextBtn.innerHTML = "&#10095;";
+
+  // Gabungkan elemen
+  content.appendChild(img);
+  content.appendChild(closeBtn);
+  lightbox.appendChild(prevBtn);
+  lightbox.appendChild(content);
+  lightbox.appendChild(nextBtn);
+  document.body.appendChild(lightbox);
+
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    img.src = images[index].src;
+    currentIndex = index;
+    lightbox.classList.add("show");
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove("show");
+  }
+
+  function showNext() {
+    currentIndex = (currentIndex + 1) % images.length;
+    img.src = images[currentIndex].src;
+  }
+
+  function showPrev() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    img.src = images[currentIndex].src;
+  }
+
+  // Event listeners
+  images.forEach((image, index) => {
+    image.addEventListener("click", () => openLightbox(index));
   });
 
-  navLinks.forEach(link => {
-    link.classList.remove("active");
-    if (link.getAttribute("href").includes(currentSection)) {
-      link.classList.add("active");
-    }
-  });
-});
+  closeBtn.addEventListener("click", closeLightbox);
+  nextBtn.addEventListener("click", showNext);
+  prevBtn.addEventListener("click", showPrev);
 
-// === Gentle hover animation for buttons ===
-const buttons = document.querySelectorAll(".btn, .btn-outline, .nav-cta");
-buttons.forEach(btn => {
-  btn.addEventListener("mousemove", (e) => {
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    btn.style.setProperty("--x", `${x}px`);
-    btn.style.setProperty("--y", `${y}px`);
+  // Tutup saat klik area luar
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
   });
 
-  btn.addEventListener("mouseleave", () => {
-    btn.style.removeProperty("--x");
-    btn.style.removeProperty("--y");
+  // Tutup dengan tombol ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") showNext();
+    if (e.key === "ArrowLeft") showPrev();
   });
 });
