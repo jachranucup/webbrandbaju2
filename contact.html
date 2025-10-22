@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kontak — ALMA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand-link">ALMA</a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="products.html" class="nav-link">Koleksi</a></li>
+          <li><a href="about.html" class="nav-link">Tentang</a></li>
+          <li><a href="contact.html" class="nav-link active">Kontak</a></li>
+          <li><a href="login.html" class="nav-cta">Masuk</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section-large contact-page">
+    <div class="wrap contact-inner" data-anim>
+      <h1>Hubungi Kami</h1>
+      <p class="lead">Kirimkan pertanyaan, pesan, atau masukan Anda — kami siap membantu dengan senang hati.</p>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim!');">
+        <input type="text" placeholder="Nama Lengkap" required>
+        <input type="email" placeholder="Alamat Email" required>
+        <textarea placeholder="Pesan Anda" rows="5" required></textarea>
+        <button type="submit" class="btn">Kirim</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© 2025 ALMA — All rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
