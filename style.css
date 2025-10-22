@@ -29,13 +29,6 @@ body {
   background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-/* Smooth fade in */
-body.loaded {
-  opacity: 1;
 }
 
 /* ====== GENERAL ====== */
@@ -90,7 +83,7 @@ h1, h2, h3, h4 {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 24px; /* updated spacing after adding Lookbook */
 }
 
 .site-nav a {
@@ -346,17 +339,35 @@ h1, h2, h3, h4 {
   font-size: 0.9rem;
 }
 
-/* ====== LOOKBOOK ====== */
+/* ====== LOOKBOOK HERO FIX ====== */
 .lookbook-hero {
   background: #fdfdfd;
   text-align: center;
   margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 100px 20px;
+}
+
+.lookbook-hero .hero-content {
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .lookbook-hero .hero-title {
   font-size: 2.8rem;
   margin-bottom: 12px;
+  text-align: center;
 }
+
+.lookbook-hero .lead {
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
 
 .lookbook-grid {
   margin-top: 60px;
@@ -437,8 +448,5 @@ h1, h2, h3, h4 {
   }
   .hero-media img {
     max-width: 90%;
-  }
-  .grid-lookbook {
-    grid-template-columns: 1fr;
   }
 }
